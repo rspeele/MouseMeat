@@ -1,6 +1,13 @@
 CXX=g++
-CXXFLAGS=-std=c++11
+CXXFLAGS=-std=c++11 -Wall
 LIBS=-lm -lstdc++
+
+DEPS = \
+	Common.h \
+	HighResolutionTime.h \
+	InputDevice.h \
+	InputDeviceList.h \
+	MouseMovement.h
 
 OBJ= \
 	HighResolutionTime.o \
@@ -8,7 +15,7 @@ OBJ= \
 	InputDeviceList.o \
 	MouseMeat.o
 
-%.o: %.cpp
+%.o: %.cpp $(DEPS)
 	$(CXX) -c $(CXXFLAGS) $(CPPFLAGS) $< -o $@
 
 all: $(OBJ)

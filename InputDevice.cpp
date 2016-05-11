@@ -13,7 +13,7 @@ int opendevicekey(const char *name, HKEY *handle, int &vendorId, int &productId)
     static char regpath[512];
     const char *base = "SYSTEM\\CurrentControlSet\\Enum\\";
     while (*name && (*name == '\\' || *name == '?')) name++;
-    int i, k, p;
+    uint32_t i, k, p;
     for (i = 0; base[i] && i < sizeof(regpath); i++)
     {
         regpath[i] = base[i];
