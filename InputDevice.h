@@ -26,7 +26,6 @@ public:
     void EnqueueMouseMovement(MouseMovement movement);
     void DequeueMouseMovements(std::vector<MouseMovement> &movements);
     static InputDeviceList *GetInputDevices();
-    static void RegisterKeyboard(HWND window);
     static void RegisterMouse(HWND window);
 };
 

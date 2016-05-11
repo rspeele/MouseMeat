@@ -32,12 +32,12 @@ int InputDeviceList::HandleRawInput(LPARAM lparam)
         );
     if (read == (UINT)-1)
     {
-        fprintf(stderr, "error getting raw input data");
+        std::cerr << "Error getting raw input data\n";
         return -1;
     }
     if (read > size || read < sizeof(RAWINPUTHEADER))
     {
-        fprintf(stderr, "size mismatch %d (expected %d)\n", read, size);
+        std::cerr << "Size mismatch %d (expected %d)\n";
         return -1;
     }
     InputDevice *device = NULL;
@@ -75,7 +75,7 @@ LRESULT CALLBACK InputDeviceList::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LP
     }
     if (!baseWndProc)
     {
-        fprintf(stderr, "!!! something is very wrong (base wndproc missing) !!!\n");
+        std::cerr << "!!! something is very wrong (base wndproc missing) !!!\n";
         return DefWindowProc(hwnd, msg, wparam, lparam);
     }
     else

@@ -34,7 +34,6 @@ int opendevicekey(const char *name, HKEY *handle, int &vendorId, int &productId)
 	{
 		vendorId = vid;
 		productId = pid;
-		printf("VID: %x, PID: %x\n", vid, pid);
 	}
     auto open = RegOpenKeyEx
         ( HKEY_LOCAL_MACHINE
@@ -159,16 +158,6 @@ bool InputDevice::IsDevice(HANDLE deviceHandle)
 #define USAGE_PAGE_GENERIC_DESKTOP 0x01
 #define USAGE_MOUSE 0x02
 #define USAGE_KEYBOARD 0x06
-
-void InputDevice::RegisterKeyboard(HWND window)
-{
-    static RAWINPUTDEVICE rid;
-    rid.usUsagePage = USAGE_PAGE_GENERIC_DESKTOP;
-    rid.usUsage = USAGE_KEYBOARD;
-    rid.dwFlags = RIDEV_NOLEGACY | RIDEV_INPUTSINK;
-    rid.hwndTarget = window;
-    RegisterRawInputDevices(&rid, 1, sizeof(rid));
-}
 
 void InputDevice::RegisterMouse(HWND window)
 {

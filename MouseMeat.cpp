@@ -1,7 +1,25 @@
 #include "Common.h"
 #include "InputDeviceList.h"
+#include "MouseMovement.h"
 
 #define TITLE "MouseMeat"
+
+void OutputThread(InputDeviceList *deviceList)
+{
+    auto movements = std::vector<MouseMovement>();
+    for (;;)
+    {
+        for (auto device : deviceList->devices)
+        {
+            movements.clear();
+            device->DequeueMouseMovements(movements);
+            for (auto movement : movements)
+            {
+                std::cout << movement.DX << ", " << movement.DY << std::endl;
+            }
+        }
+    }
+}
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdShow)
 {
@@ -46,9 +64,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdS
         return -1;
     }
 
-    InputDevice::RegisterKeyboard(hwnd);
     InputDevice::RegisterMouse(hwnd);
     deviceList->InterceptEvents(hwnd);
+
+    auto outputThread = std::thread(OutputThread, deviceList);
 
     for (;;)
     {
@@ -59,6 +78,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdS
             DispatchMessage(&msg);
         }
     }
+
+    outputThread.join();
 
     delete deviceList;
 

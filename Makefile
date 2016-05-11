@@ -3,7 +3,6 @@ CXXFLAGS=-std=c++11
 LIBS=-lm -lstdc++
 
 OBJ= \
-	History.o \
 	HighResolutionTime.o \
 	InputDevice.o \
 	InputDeviceList.o \
