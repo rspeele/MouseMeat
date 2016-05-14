@@ -23,7 +23,10 @@ namespace Events
         data.sync.lock();
 
         auto previous = data.active;
+
         data.active = data.inactive;
+        data.active->clear();
+
         data.inactive = previous;
 
         data.sync.unlock();
