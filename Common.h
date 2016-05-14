@@ -5,6 +5,7 @@
 // For mingw32
 #define WIN32_LEAN_AND_MEAN
 #define _WIN32_WINNT 0x0601
+#define WM_INPUT_DEVICE_CHANGE 0x00FE
 #include "mingw-std-threads/mingw.mutex.h"
 #include "mingw-std-threads/mingw.thread.h"
 
@@ -13,9 +14,11 @@
 #include <vector>
 #include <stdexcept>
 #include <iostream>
+#include <cstdint>
+#include <map>
+#include <atomic>
 
 // C libs
-#include <stdint.h>
 #include <stdio.h>
 #include <windows.h>
 
@@ -27,11 +30,8 @@ template<typename T> T max(T x, T y)
 {
     return x > y ? x : y;
 }
-int npo2(int x);
 
-struct MouseMove
-{
-    int DX, DY;
-};
+using std::int32_t;
+using std::int16_t;
 
 #endif

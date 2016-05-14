@@ -1,30 +1,24 @@
 #include "Common.h"
-#include "InputDeviceList.h"
-#include "MouseMovement.h"
+#include "Events.h"
+#include "Input.h"
+#include "Output.h"
 
-#define TITLE "MouseMeat"
+const char *TITLE = "MouseMeat";
 
-void OutputThread(InputDeviceList *deviceList)
+void OutputThread(bool &stop)
 {
-    auto movements = std::vector<MouseMovement>();
-    for (;;)
+    while (!stop)
     {
-        for (auto device : deviceList->devices)
+        auto events = Events::SwapBuffer();
+        for (auto event : events)
         {
-            movements.clear();
-            device->DequeueMouseMovements(movements);
-            for (auto movement : movements)
-            {
-                std::cout << movement.DX << ", " << movement.DY << std::endl;
-            }
+            Output::OutputEvent(event);
         }
     }
 }
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdShow)
 {
-    auto deviceList = InputDevice::GetInputDevices();
-
     WNDCLASS wc;
 
     wc.style = CS_HREDRAW|CS_VREDRAW;
@@ -64,10 +58,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdS
         return -1;
     }
 
-    InputDevice::RegisterMouse(hwnd);
-    deviceList->InterceptEvents(hwnd);
+    Input::StartListening(hwnd);
 
-    auto outputThread = std::thread(OutputThread, deviceList);
+    bool stop = false;
+    auto outputThread = std::thread(OutputThread, stop);
 
     for (;;)
     {
@@ -80,8 +74,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdS
     }
 
     outputThread.join();
-
-    delete deviceList;
 
     return 0;
 }

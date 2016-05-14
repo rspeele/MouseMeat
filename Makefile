@@ -5,14 +5,15 @@ LIBS=-lm -lstdc++
 DEPS = \
 	Common.h \
 	HighResolutionTime.h \
-	InputDevice.h \
-	InputDeviceList.h \
-	MouseMovement.h
+	Input.h \
+	Output.h \
+	Events.h
 
 OBJ= \
 	HighResolutionTime.o \
-	InputDevice.o \
-	InputDeviceList.o \
+	Input.o \
+	Output.o \
+	Events.o \
 	MouseMeat.o
 
 %.o: %.cpp $(DEPS)

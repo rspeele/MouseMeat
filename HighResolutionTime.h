@@ -1,8 +1,9 @@
 #pragma once
 #include "Common.h"
 
+typedef LONGLONG Microseconds;
+
 namespace HighResolutionTime
 {
-    typedef LONGLONG Microseconds;
 	Microseconds GetTime();
 }
