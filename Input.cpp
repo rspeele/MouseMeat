@@ -172,7 +172,7 @@ namespace Input
         if (raw.header.dwType == RIM_TYPEMOUSE)
         {
             Event ev;
-            ev.DeviceId = 0;
+            ev.DeviceId = registerDevice(raw.header.hDevice);
             ev.DX = raw.data.mouse.lLastX;
             ev.DY = raw.data.mouse.lLastY;
             ev.Time = HighResolutionTime::GetTime();
