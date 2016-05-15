@@ -6,7 +6,7 @@ namespace Output
     {
         std::cout
             << "{" << "\"type\"" << ":" << "\"deviceInfo\""
-            << "," << "\"info\"" << ":"
+            << "," << "\"deviceInfo\"" << ":"
             << "{" << "\"deviceId\"" << ":" << device.DeviceId
             << "," << "\"usbVendorId\"" << ":" << device.UsbVendorId
             << "," << "\"usbProductId\"" << ":" << device.UsbProductId
@@ -14,18 +14,20 @@ namespace Output
             << "," << "\"driver\"" << ":" << "\"" << device.Driver << "\""
             << "," << "\"description\"" << ":" << "\"" << device.Description << "\""
             << "}"
-            << "}";
+            << "}"
+            << std::endl;
     }
     void OutputEvent(const Event &event)
     {
         std::cout
             << "{" << "\"type\"" << ":" << "\"move\""
-            << "," << "\"info\"" << ":"
+            << "," << "\"move\"" << ":"
             << "{" << "\"deviceId\"" << ":" << event.DeviceId
-            << "," << "\"time\"" << ":" << event.Time
+            << "," << "\"us\"" << ":" << event.Time
             << "," << "\"dx\"" << ":" << event.DX
             << "," << "\"dy\"" << ":" << event.DY
             << "}"
-            << "}";
+            << "}"
+            << std::endl;
     }
 }
