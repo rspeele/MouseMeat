@@ -5,16 +5,23 @@
 
 const char *TITLE = "MouseMeat";
 
-void OutputThread(bool &stop)
+void OutputThread(bool *stop, DWORD uiThread)
 {
-    while (!stop)
+    char cmd;
+    while (std::cin >> cmd)
     {
         auto events = Events::SwapBuffer();
         for (auto event : events)
         {
             Output::OutputEvent(event);
         }
+        if (cmd == 'q')
+        {
+            *stop = true;
+            break;
+        }
     }
+    PostThreadMessage(uiThread, WM_QUIT, 0, 0);
 }
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdShow)
@@ -61,12 +68,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdS
     Input::StartListening(hwnd);
 
     bool stop = false;
-    auto outputThread = std::thread(OutputThread, stop);
+    auto uiThread = GetCurrentThreadId();
+    auto outputThread = std::thread(OutputThread, &stop, uiThread);
 
-    for (;;)
+    while (!stop)
     {
         MSG msg;
-        if (GetMessage(&msg, NULL, 0, 0) > 0)
+        if (GetMessage(&msg, NULL, 0, 0) > 0 && !stop)
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
