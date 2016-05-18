@@ -10,10 +10,14 @@ void OutputThread(bool *stop, DWORD uiThread)
     char cmd;
     while (std::cin >> cmd)
     {
-        auto events = Events::SwapBuffer();
-        for (auto event : events)
+        for (;;)
         {
-            Output::OutputEvent(event);
+            auto events = Events::SwapBuffer();
+            for (auto event : events)
+            {
+                Output::OutputEvent(event);
+            }
+            if (events.size() > 0) break;
         }
         if (cmd == 'q')
         {
