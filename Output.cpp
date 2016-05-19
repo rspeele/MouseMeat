@@ -2,8 +2,11 @@
 
 namespace Output
 {
+    std::mutex sync;
+
     void OutputDeviceInfo(const DeviceInfo &device)
     {
+        std::lock_guard<std::mutex> lock(sync);
         std::cout
             << "{" << "\"type\"" << ":" << "\"deviceInfo\""
             << "," << "\"deviceInfo\"" << ":"
@@ -19,6 +22,7 @@ namespace Output
     }
     void OutputEvent(const Event &event)
     {
+        std::lock_guard<std::mutex> lock(sync);
         std::cout
             << "{" << "\"type\"" << ":" << "\"move\""
             << "," << "\"move\"" << ":"
