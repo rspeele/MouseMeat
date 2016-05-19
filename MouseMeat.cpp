@@ -21,6 +21,11 @@ void OutputThread(bool *stop, DWORD uiThread)
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdShow)
 {
+    // Disable syncing iostreams with C stdio,
+    // since we won't use C stdio here and it
+    // makes iostreams noticeably slow.
+    std::ios_base::sync_with_stdio(false);
+
     WNDCLASS wc;
 
     wc.style = CS_HREDRAW|CS_VREDRAW;
