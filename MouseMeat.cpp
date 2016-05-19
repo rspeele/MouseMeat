@@ -7,19 +7,26 @@ const char *TITLE = "MouseMeat";
 
 void OutputThread(bool *stop, DWORD uiThread)
 {
-    while (!Input::HasStandardInput())
+    try
     {
-        auto events = Events::SwapBuffer();
-        for (auto event : events)
+        while (!Input::HasStandardInput())
         {
-            Output::OutputEvent(event);
+            auto events = Events::SwapBuffer();
+            for (auto event : events)
+            {
+                Output::OutputEvent(event);
+            }
         }
+    }
+    catch (const std::exception &err)
+    {
+        std::cerr << err.what() << std::endl;
     }
     *stop = true;
     PostThreadMessage(uiThread, WM_QUIT, 0, 0);
 }
 
-int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdShow)
+void Run(HINSTANCE hInst)
 {
     // Disable syncing iostreams with C stdio,
     // since we won't use C stdio here and it
@@ -41,8 +48,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdS
 
     if (!RegisterClass(&wc))
     {
-        std::cerr << "Failed to register window class\n";
-        return -1;
+        throw std::runtime_error("Failed to register window class");
     }
 
     auto hwnd =
@@ -61,8 +67,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdS
 
     if (!hwnd)
     {
-        std::cerr << "Failed to create (hidden) window\n";
-        return -1;
+        throw std::runtime_error("Failed to create (hidden) window");
     }
 
     Input::StartListening(hwnd);
@@ -82,6 +87,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdS
     }
 
     outputThread.join();
+}
 
-    return 0;
+int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hignore, LPSTR lpignore, int nCmdShow)
+{
+    try
+    {
+        Run(hInst);
+        return 0;
+    }
+    catch (const std::exception &err)
+    {
+        std::cerr << err.what() << std::endl;
+        return 1;
+    }
 }
