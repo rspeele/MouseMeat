@@ -23,7 +23,7 @@ namespace Events
     const std::vector<Event> &SwapBuffer()
     {
         std::unique_lock<std::mutex> lock(data.sync);
-        auto wait = data.signal.wait_for(lock, std::chrono::seconds(1));
+        auto wait = data.signal.wait_for(lock, std::chrono::milliseconds(250));
         if (wait == std::cv_status::timeout)
         {
             return data.empty;
