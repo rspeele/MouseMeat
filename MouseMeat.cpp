@@ -53,17 +53,18 @@ void Run(HINSTANCE hInst)
 
     auto hwnd =
         CreateWindow
-        (TITLE, // class name
-         TITLE, // window name
-         0,
-         CW_USEDEFAULT, // x
-         CW_USEDEFAULT, // y
-         0, // width
-         0, // height
-         NULL, // parent
-         NULL, // menu
-         hInst, // instance
-         NULL); // lpParam
+        ( TITLE // class name
+        , TITLE // window name
+        , 0 // style
+        , CW_USEDEFAULT // x
+        , CW_USEDEFAULT // y
+        , 0 // width
+        , 0 // height
+        , NULL // parent
+        , NULL // menu
+        , hInst // instance
+        , NULL  // lpParam
+        );
 
     if (!hwnd)
     {
