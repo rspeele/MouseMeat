@@ -15,7 +15,7 @@ struct Event
 
 namespace Events
 {
-    std::vector<Event> &SwapBuffer();
+    const std::vector<Event> &SwapBuffer();
     void Buffer(Event event);
 }
 

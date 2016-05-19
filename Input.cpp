@@ -1,6 +1,7 @@
 #include "Input.h"
 #include "Output.h"
 #include "Events.h"
+#include <conio.h>
 
 namespace Input
 {
@@ -248,5 +249,40 @@ namespace Input
         RegisterRawInputDevices(&rid, 1, sizeof(rid));
         registerDevices();
         overrideWndProc(window);
+    }
+
+    struct WinInput
+    {
+        HANDLE handle;
+        bool isConsole;
+    };
+
+    WinInput GetWinInput()
+    {
+        WinInput result;
+        result.handle = GetStdHandle(STD_INPUT_HANDLE);
+        result.isConsole = GetFileType(result.handle) == FILE_TYPE_CHAR;
+        return result;
+    }
+
+    bool HasStandardInput()
+    {
+        static auto winInput = GetWinInput();
+        // Crappy thing about Windows:
+        // we can't just tell if stdin has input,
+        // we have to do different stuff depending on whether
+        // it's the console (_kbhit()) or a pipe.
+        if (winInput.isConsole) return _kbhit();
+        DWORD avail;
+        auto success = PeekNamedPipe
+            ( winInput.handle
+            , NULL
+            , 0
+            , NULL
+            , &avail
+            , NULL
+            );
+        if (!success) throw std::runtime_error("Failed to peek input");
+        return avail > 0;
     }
 }

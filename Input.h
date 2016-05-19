@@ -18,6 +18,7 @@ struct DeviceInfo
 namespace Input
 {
     void StartListening(HWND window);
+    bool HasStandardInput();
 }
 
 #endif

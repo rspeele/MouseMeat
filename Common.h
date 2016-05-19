@@ -6,8 +6,10 @@
 #define WIN32_LEAN_AND_MEAN
 #define _WIN32_WINNT 0x0601
 #define WM_INPUT_DEVICE_CHANGE 0x00FE
+#include <mutex>
 #include "mingw-std-threads/mingw.mutex.h"
 #include "mingw-std-threads/mingw.thread.h"
+#include "mingw-std-threads/mingw.condition_variable.h"
 
 // C++ libs
 #include <queue>
@@ -16,7 +18,7 @@
 #include <iostream>
 #include <cstdint>
 #include <map>
-#include <atomic>
+#include <chrono>
 
 // C libs
 #include <stdio.h>

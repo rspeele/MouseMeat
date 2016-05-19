@@ -7,24 +7,15 @@ const char *TITLE = "MouseMeat";
 
 void OutputThread(bool *stop, DWORD uiThread)
 {
-    char cmd;
-    while (std::cin >> cmd)
+    while (!Input::HasStandardInput())
     {
-        for (;;)
+        auto events = Events::SwapBuffer();
+        for (auto event : events)
         {
-            auto events = Events::SwapBuffer();
-            for (auto event : events)
-            {
-                Output::OutputEvent(event);
-            }
-            if (events.size() > 0) break;
-        }
-        if (cmd == 'q')
-        {
-            *stop = true;
-            break;
+            Output::OutputEvent(event);
         }
     }
+    *stop = true;
     PostThreadMessage(uiThread, WM_QUIT, 0, 0);
 }
 

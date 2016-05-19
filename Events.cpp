@@ -7,7 +7,9 @@ namespace Events
         std::vector<Event> buffer1, buffer2;
     public:
         std::mutex sync;
+        std::condition_variable signal;
         std::vector<Event> *inactive, *active;
+        const std::vector<Event> empty;
 
         StaticData()
         {
@@ -18,28 +20,33 @@ namespace Events
 
     StaticData data;
 
-    std::vector<Event> &SwapBuffer()
+    const std::vector<Event> &SwapBuffer()
     {
-        data.sync.lock();
+        std::unique_lock<std::mutex> lock(data.sync);
+        auto wait = data.signal.wait_for(lock, std::chrono::seconds(1));
+        if (wait == std::cv_status::timeout)
+        {
+            return data.empty;
+        }
+        else
+        {
+            auto previous = data.active;
 
-        auto previous = data.active;
+            data.active = data.inactive;
+            data.active->clear();
 
-        data.active = data.inactive;
-        data.active->clear();
+            data.inactive = previous;
 
-        data.inactive = previous;
-
-        data.sync.unlock();
-
-        return *previous;
+            return *previous;
+        }
     }
 
     void Buffer(Event event)
     {
-        data.sync.lock();
-
-        data.active->push_back(event);
-
-        data.sync.unlock();
+        {
+            std::lock_guard<std::mutex> lock(data.sync);
+            data.active->push_back(event);
+        }
+        data.signal.notify_one();
     }
 }
