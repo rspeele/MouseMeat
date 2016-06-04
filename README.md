@@ -6,6 +6,63 @@ This is a program which outputs a stream of JSON objects representing:
 
 It does this until receiving standard input, then exits.
 
+### Output format
+
+MouseMeat outputs one JSON object, representing a single event, per
+line. This was chosen over outputting a JSON list of event objects,
+because in other programs it is easier to handle streaming data from
+MouseMeat's redirected standard output when you can simply read the
+stream a line at a time and feed each line into your JSON parser.
+
+Each event has a type field, and an object field with the same name as
+the value of its type field, which carries type-specific data.
+
+If you would like to write a program that processes these logs and
+saves extra metadata, like computed statistics or info about the mouse
+driver settings in use, I suggest making up your own event type and
+adding it at the start or end of the event stream rather than creating
+a completely new format.
+
+Currently, there are only two types of event. Here are examples to
+show the format -- remember though that in practice each event would
+be formatted on a single line.
+
+#### Device Info
+
+Each mouse device plugged in when MouseMeat starts generates a device
+info event. These events are also generated when additional mice are
+plugged in while MouseMeat is running.
+
+```json
+{ type: "deviceInfo"
+, deviceInfo:
+  { deviceId: 1
+  , usbVendorId: 2
+  , usbProductId: 3
+  , driver: "An identifier string for the driver this mouse is using"
+  , description: "The description of the device according to Windows"
+  }
+}
+```
+
+#### Move
+
+Each movement reported by a mouse generates a move event. Note that
+"us" field corresponds to the microseconds elapsed as of the event.
+You should use a 64-bit integer to represent this field in your
+application!
+
+```json
+{ type: "move"
+, move:
+  { deviceId: 1
+  , us: 60000000
+  , dx: -1
+  , dy: 3
+  }
+}
+```
+
 ### Goals
 
 * Accuracy/Precision of data:
