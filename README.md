@@ -27,6 +27,16 @@ Each mouse device plugged in when MouseMeat starts generates a device
 info event. These events are also generated when additional mice are
 plugged in while MouseMeat is running.
 
+The `deviceId` field is an arbitrary number chosen by MouseMeat to
+correlate the device with its movement events within a single log. It
+has nothing to do with the type of mouse and cannot be correlated
+across logs!
+
+The `usbVendorId` and `usbProductId` fields, taken together, usually
+identify a mouse model, but some manufacturers use the same product ID
+for multiple models. There is nothing like a serial number that
+identifies a specific instance of a product.
+
 ```json
 { "type": "deviceInfo"
 , "deviceInfo":
