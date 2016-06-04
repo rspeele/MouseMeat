@@ -34,13 +34,13 @@ info event. These events are also generated when additional mice are
 plugged in while MouseMeat is running.
 
 ```json
-{ type: "deviceInfo"
-, deviceInfo:
-  { deviceId: 1
-  , usbVendorId: 2
-  , usbProductId: 3
-  , driver: "An identifier string for the driver this mouse is using"
-  , description: "The description of the device according to Windows"
+{ "type": "deviceInfo"
+, "deviceInfo":
+  { "deviceId": 1
+  , "usbVendorId": 2
+  , "usbProductId": 3
+  , "driver": "An identifier string for the driver this mouse is using"
+  , "description": "The description of the device according to Windows"
   }
 }
 ```
@@ -48,17 +48,24 @@ plugged in while MouseMeat is running.
 #### Move
 
 Each movement reported by a mouse generates a move event. Note that
-"us" field corresponds to the microseconds elapsed as of the event.
-You should use a 64-bit integer to represent this field in your
-application!
+the `us` field corresponds to the microseconds elapsed as of the
+event, since an undefined epoch. This does not tell you in calendar
+time when the log was recorded, but can be used to measure the time
+between two events in the same log. You should use a 64-bit integer to
+represent this field in your application!
+
+The `dx` and `dy` fields tell you how far the mouse moved in this
+event on the X and Y axes. A positive value on the X axis means the
+mouse moved to the right. A positive value on the Y axis means the
+mouse moved forward (away from the user).
 
 ```json
-{ type: "move"
-, move:
-  { deviceId: 1
-  , us: 60000000
-  , dx: -1
-  , dy: 3
+{ "type": "move"
+, "move":
+  { "deviceId": 1
+  , "us": 60000000
+  , "dx": -1
+  , "dy": 3
   }
 }
 ```
