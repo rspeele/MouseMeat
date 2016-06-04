@@ -175,7 +175,7 @@ namespace Input
             Event ev;
             ev.DeviceId = registerDevice(raw.header.hDevice);
             ev.DX = raw.data.mouse.lLastX;
-            ev.DY = raw.data.mouse.lLastY;
+            ev.DY = -raw.data.mouse.lLastY;
             ev.Time = HighResolutionTime::GetTime();
             Events::Buffer(ev);
         }
