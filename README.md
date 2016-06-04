@@ -6,6 +6,10 @@ This is a program which outputs a stream of JSON objects representing:
 
 It does this until receiving standard input, then exits.
 
+### Downloading
+
+You can obtain a compiled binary from the [releases page](https://github.com/rspeele/MouseMeat/releases).
+
 ### Output format
 
 MouseMeat outputs one JSON object, representing a single event, per
