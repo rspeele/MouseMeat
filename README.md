@@ -17,12 +17,6 @@ stream a line at a time and feed each line into your JSON parser.
 Each event has a type field, and an object field with the same name as
 the value of its type field, which carries type-specific data.
 
-If you would like to write a program that processes these logs and
-saves extra metadata, like computed statistics or info about the mouse
-driver settings in use, I suggest making up your own event type and
-adding it at the start or end of the event stream rather than creating
-a completely new format.
-
 Currently, there are only two types of event. Here are examples to
 show the format -- remember though that in practice each event would
 be formatted on a single line.
@@ -70,7 +64,19 @@ mouse moved forward (away from the user).
 }
 ```
 
-### Goals
+#### Custom events
+
+If you would like to write a program that processes these logs and
+saves extra metadata, like computed statistics or info about the mouse
+driver settings in use, I suggest making up your own event type and
+adding it at the start or end of the event stream rather than creating
+a completely new format.
+
+No built-in MouseMeat event type will ever start with the string
+`"custom"`. Therefore, you can safely name your own event types
+something like `"customMyAppMyEventType"`.
+
+### Project goals
 
 * Accuracy/Precision of data:
   * The events should not be subject to mouse smoothing or software acceleration from the OS.
