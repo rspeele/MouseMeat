@@ -143,6 +143,7 @@ namespace Input
         }
         for (UINT i = 0; i < numrids; i++)
         {
+            if (rids[i].dwType != RIM_TYPEMOUSE) continue;
             registerDevice(rids[i].hDevice);
         }
         delete[] rids;
