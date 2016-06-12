@@ -22,6 +22,7 @@ namespace HighResolutionTime
         }
         return info;
     }
+    Microseconds start = 0;
     Microseconds GetTime()
     {
         static QueryPerformanceInfo info = GetQueryPerformanceInfo();
@@ -30,7 +31,9 @@ namespace HighResolutionTime
             LARGE_INTEGER counts;
             if (QueryPerformanceCounter(&counts))
             {
-				return counts.QuadPart * 1000000 / info.CountsPerSecond;
+				Microseconds micros = counts.QuadPart * 1000000 / info.CountsPerSecond;
+                if (!start) start = micros;
+                return micros - start;
             }
 			else
 			{
